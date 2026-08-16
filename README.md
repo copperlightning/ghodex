@@ -1,8 +1,7 @@
 # ghodex
 A fanmade Phasmophobia companion app.
 
-Author: Studio Searose
-
+Author: copperlightning
 Version: 4.0.0
 
 LIVE SITE: https://studiosearose.com/ghodex/
