@@ -3,7 +3,9 @@ A fanmade Phasmophobia companion app.
 
 Author: copperlightning
 
-Version: 4.0.0
+Version: 5.0.0
+
+Last Updated: August 16, 2026
 
 This app is meant as a companion to Phasmophobia, a PC game now available on Steam.
 

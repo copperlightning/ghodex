@@ -1,7 +1,7 @@
 /*
     Ghodex: A Phasmophobia Fanmade Journal App
-    Ver 4.0.0
-    by Studio Searose
+    Ver 5.0.0
+    by copperlightning
     script.js
 */
 
@@ -15,249 +15,326 @@ var selection = []; // evidence clicked
 var pos; // var for deletion position
 var results = 0; // no. of ghosts shown
 var time = 100; // fade animation time
-var lastUpdated = "Oct 1, 2022"; // display date
+var lastUpdated = "Aug 16, 2026"; // display date
 
 // GET ELEMENTS
 var wrapper = document.getElementById("wrapper");
 
 // EVIDENCE LIST
-var evidence = ["EMF Level 5", "Ghost Orb", "Ghost Writing",                             
-                "Fingerprints", "Spirit Box", "Freezing Temps",
-                "D.O.T.S. Projector"];
-
-/* 
-0 - emf
-1 - orbs
-2 - writing
-3 - fingerprints
-4 - spirit box
-5 - freezing
-6 - dots
-*/
+var evidence = [
+                    "EMF Level 5", // 0
+                    "Ghost Orb", // 1
+                    "Ghost Writing", // 2                            
+                    "Fingerprints", // 3
+                    "Spirit Box", // 4
+                    "Freezing Temps", // 5
+                    "D.O.T.S. Projector" // 6
+                ];
 
 // DEFINE GHOST OBJECTS (descriptions from the phasmophobia wiki)
-var demon = {
-  id: "#demon",
-  name: "Demon",
-  evidence: [evidence[3], evidence[2], evidence[5]],
-    strength: "Can initiate hunts more often.",
-    weakness: "Crucifix effectiveness is increased to 5m against one.",
-  matches: 0
+var aswang = {
+    id: "#aswang",
+    name: "Aswang",
+    evidence: [evidence[2], evidence[5], evidence[6]],
+    strength: "Will accelerate faster with line-of-sight than any other ghost. Can sometimes hunt with zero grace period.",
+    weakness: "Cannot kill players in official hiding spots. Slower hunt base speed.",
+    matches: 0
 }
 
 var banshee = {
-  id: "#banshee",
-  name: "Banshee",
-  evidence: [evidence[3], evidence[1], evidence[6]],
-    strength: "Will target only one player at a time.",
-    weakness: "Has a distinctive wail on the Parabolic Microphone.",
+    id: "#banshee",
+    name: "Banshee",
+    evidence: [evidence[1], evidence[3], evidence[6]],
+    strength: "Will target a chosen player, assuming said player is inside. Increased chance of performing a singing ghost event.",
+    weakness: "Has several distinctive wails on the Parabolic Microphone and the Sound Recorder.",
+    matches: 0
+}
+
+var dayan = {
+    id: "#dayan",
+    name: "Dayan",
+    evidence: [evidence[0], evidence[1], evidence[4]],
+    strength: "Moves faster during hunts and hunts sooner when a player moves near the Dayan.",
+    weakness: "Moves slower during hunts and hunts later when a player stands still near the Dayan.",
+    matches: 0
+}
+
+var deildegast = {
+    id: "#deildegast",
+    name: "Deildegast",
+    evidence: [evidence[0], evidence[2], evidence[6]],
+    strength: "Moves significantly faster at the start of the contract.",
+    weakness: "Becomes slower when on-site props are moved.",
+    matches: 0
+}
+
+var demon = {
+  id: "#demon",
+  name: "Demon",
+  evidence: [evidence[2], evidence[3], evidence[5]],
+    strength: "Incense is less effective, preventing a hunt for less time. Can rarely initiate a hunt at any sanity level.",
+    weakness: "Crucifix range is 50% larger than placement range indicator.",
   matches: 0
+}
+
+var deogen = {
+    id: "#deogen",
+    name: "Deogen",
+    evidence: [evidence[2], evidence[4], evidence[6]],
+    strength: "Always knows where the player is during a hunt and moves very quickly toward its victim.",
+    weakness: "Moves extremely slowly once near its victim.",
+    matches: 0
+}
+
+var gallu = {
+    id: "#gallu",
+    name: "Gallu",
+    evidence: [evidence[0], evidence[3], evidence[4]],
+    strength: "Becomes aggressive when protective equipment is used.",
+    weakness: "Becomes less aggressive after a hunt.",
+    matches: 0
+}
+
+var goryo = {
+    id: "#goryo",
+    name: "Goryo",
+    evidence: [evidence[0], evidence[3], evidence[6]],
+    strength: "Can only enter a D.O.T.S. state when no player is in the same room. Its D.O.T.S.silhouette can only be seen through a Video Camera.",
+    weakness: "Cannot wander far from its room, or change favorite rooms.",
+    matches: 0
+}
+
+var hantu = {
+    id: "#hantu",
+    name: "Hantu",
+    evidence: [evidence[1], evidence[3], evidence[5]],
+    strength: "Lower temperatures allow the Hantu to move faster during hunts.",
+    weakness: "Warmer areas slow the Hantu's movement while hunting. Will produce freezing breath during a hunt if the fuse box is off. Will never turn the fuse box on.",
+    matches: 0
+}
+
+var jinn = {
+    id: "#jinn",
+    name: "Jinn",
+    evidence: [evidence[0], evidence[3], evidence[5]],
+    strength: "Travels at a faster speed if a distant player is in line of sight while the fuse box is on. Can occasionally drain large amounts of sanity from a nearby player.",
+    weakness: "Cannot use its ability if the fuse box is off. Will never turn the fuse box off directly.",
+    matches: 0
+}
+
+var kormos = {
+    id: "#kormos",
+    name: "Kormos",
+    evidence: [evidence[1], evidence[3], evidence[4]],
+    strength: "Can detect a player's footsteps from far away during a hunt and hunts earlier if players sprint nearby.",
+    weakness: "Can nearly not detect the player visually.",
+    matches: 0
+}
+
+var mare = {
+    id: "#mare",
+    name: "Mare",
+    evidence: [evidence[2], evidence[4], evidence[6]],
+    strength: "Can hunt at a higher sanity in the dark.",
+    weakness: "Has a lower hunt sanity threshold in the light. Will occasionally turn lights off immediately after a player has turned them on. Will never turn a light on.",
+    matches: 0
+}
+
+var moroi = {
+    id: "#moroi",
+    name: "Moroi",
+    evidence: [evidence[2], evidence[4], evidence[5]],
+    strength: "Moves noticeably faster at low average sanity. Can curse players, making them lose sanity quicker than usual while in the investigation zone.",
+    weakness: "Incense blinds the ghost for 50% longer during hunts.",
+    matches: 0
+}
+
+var myling = {
+    id: "#myling",
+    name: "Myling",
+    evidence: [evidence[0], evidence[2], evidence[3]],
+    strength: "Only becomes audible during a hunt at a closer range than other ghosts.",
+    weakness: "Produces paranormal sounds more frequently on the Parabolic Microphone.",
+    matches: 0
+}
+
+var obake = {
+    id: "#obake",
+    name: "Obake",
+    evidence: [evidence[0], evidence[1], evidence[3]],
+    strength: "Has a chance to not leave fingerprints when interacting with things. May cause existing fingerprints to disappear sooner than usual.",
+    weakness: "Has a small chance of leaving special fingerprints. Can briefly shapeshift into another model during a hunt.",
+    matches: 0
+}
+
+var obambo = {
+    id: "#obambo",
+    name: "Obambo",
+    evidence: [evidence[2], evidence[3], evidence[6]],
+    strength: "Hunts earlier and moves faster in its \"aggressive\" state.",
+    weakness: "Hunts later and moves slower in its \"calm\" state. Hunts initiated in its \"aggressive\" state have a reduced duration.",
+    matches: 0
+}
+
+var oni = {
+    id: "#oni",
+    name: "Oni",
+    evidence: [evidence[0], evidence[5], evidence[6]],
+    strength: "Increased activity when players are nearby.",
+    weakness: "More visible during hunts. Cannot perform the \"airball\" ghost event.",
+    matches: 0
+}
+
+var onryo = {
+    id: "#onryo",
+    name: "Onryo",
+    evidence: [evidence[1], evidence[4], evidence[5]],
+    strength: "Will attempt to hunt after it has extinguished three flames regardless of average sanity.",
+    weakness: "A nearby lit flame will prevent the Onryo from hunting, just like a crucifix.",
+    matches: 0
+}
+
+var phantom = {
+    id: "#phantom",
+    name: "Phantom",
+    evidence: [evidence[2], evidence[3], evidence[6]],
+    strength: "Looking at a Phantom and hearing heartbeat sounds will drain the player's sanity. Will occasionally walk to a random player.",
+    weakness: "Taking a photo of the Phantom will cause it to disappear. Less visible during hunts.",
+    matches: 0
+}
+
+var poltergeist = {
+    id: "#poltergeist",
+    name: "Poltergeist",
+    evidence: [evidence[2], evidence[3], evidence[4]],
+    strength: "Capable of throwing multiple objects at once, draining sanity. Can throw objects at high velocities.",
+    weakness: "Becomes powerless with no throwables nearby.",
+    matches: 0
+}
+
+var raiju = {
+    id: "#raiju",
+    name: "Raiju",
+    evidence: [evidence[0], evidence[1], evidence[5]],
+    strength: "Moves faster near active electronic equipment.",
+    weakness: "Disrupts electronic equipment from further away when it hunts.",
+    matches: 0
 }
 
 var revenant = {
   id: "#revenant",
   name: "Revenant",
-  evidence: [evidence[1], evidence[2], evidence[5]],
-    strength: "Can travel significantly faster if a player is spotted during a hunt.",
-    weakness: "Moves very slowly when not chasing a player.",
+    evidence: [evidence[1], evidence[2], evidence[5]],
+    strength: "Moves significantly faster when a player is detected during a hunt.",
+    weakness: "Moves very slowly when not detecting a player.",
   matches: 0
 }
 
-var oni = {
-  id: "#oni",
-  name: "Oni",
-  evidence: [evidence[0], evidence[5], evidence[6]],
-    strength: "Increased activity and ghost events.",
-    weakness: "An Oni's increased activity makes them easier to find.",
-  matches: 0
+var shade = {
+    id: "#shade",
+    name: "Shade",
+    evidence: [evidence[0], evidence[2], evidence[5]],
+    strength: "Less likely to perform interactions.",
+    weakness: "Cannot hunt if people are nearby.",
+    matches: 0
 }
 
-var mare = {
-  id: "#mare",
-  name: "Mare",
-  evidence: [evidence[4], evidence[1], evidence[2]],
-    strength: "Has an increased chance to attack in the dark.",
-    weakness: "Turning the lights on will reduce the chance of an attack.",
-  matches: 0
+var spirit = {
+    id: "#spirit",
+    name: "Spirit",
+    evidence: [evidence[0], evidence[2], evidence[4]],
+    strength: "No strength.",
+    weakness: "Incense is more effective, preventing a hunt for longer.",
+    matches: 0
+}
+
+var thaye = {
+    id: "#thaye",
+    name: "Thaye",
+    evidence: [evidence[1], evidence[2], evidence[6]],
+    strength: "Moves faster during a hunt and much more active in general at the beginning of a contract.",
+    weakness: "Becomes slower and less active over time when players are nearby.",
+    matches: 0
+}
+
+var themimic = {
+    id: "#themimic",
+    name: "The Mimic",
+    evidence: [evidence[2], evidence[3], evidence[5]],
+    strength: "Can mimic the abilities and traits of other ghosts.",
+    weakness: "Will present fake Ghost Orbs as secondary evidence.",
+    matches: 0
+}
+
+var thetwins = {
+    id: "#thetwins",
+    name: "The Twins",
+    evidence: [evidence[0], evidence[4], evidence[5]],
+    strength: "Either twin may start a hunt, though not at the same time. One twin is slow, the other is fast.",
+    weakness: "Will often interact with the environment at the same time but usually in different places.",
+    matches: 0
+}
+
+var wraith = {
+    id: "#wraith",
+    name: "Wraith",
+    evidence: [evidence[0], evidence[4], evidence[6]],
+    strength: "Cannot be tracked by footsteps. Will occasionally teleport to a random player.",
+    weakness: "Will not step in salt.",
+    matches: 0
+}
+
+var yokai = {
+    id: "#yokai",
+    name: "Yokai",
+    evidence: [evidence[1], evidence[4], evidence[6]],
+    strength: "Talking in the same room as a Yokai temporarily allows it to hunt at a much higher sanity threshold than usual.",
+    weakness: "Can only hear players within a short radius during a hunt.",
+    matches: 0
 }
 
 var yurei = {
   id: "#yurei",
   name: "Yurei",
-  evidence: [evidence[1], evidence[5], evidence[6]],
-    strength: "Has a stronger effect on sanity.",
-    weakness: "Smudging the Yurei's ghost room will reduce how often it wanders.",
-  matches: 0
-}
-
-var wraith = {
-  id: "#wraith",
-  name: "Wraith",
-  evidence: [evidence[0], evidence[4], evidence[6]],
-    strength: "Does not leave UV footprints after stepping in salt.",
-    weakness: "Will become more active if it steps in salt.",
-  matches: 0
-}
-
-var jinn = {
-  id: "#jinn",
-  name: "Jinn",
-  evidence: [evidence[0], evidence[3], evidence[5]],
-    strength: "Travels at faster speeds if its victim is far away.",
-    weakness: "Cannot use its ability if the site's fuse box is off.",
-  matches: 0
-}
-
-var phantom = {
-  id: "#phantom",
-  name: "Phantom",
-  evidence: [evidence[4], evidence[3], evidence[6]],
-    strength: "Looking at a Phantom will lower the player's sanity considerably.",
-    weakness: "Taking a photo of the Phantom will cause it to briefly disappear.",
-  matches: 0
-}
-
-var polt = {
-  id: "#polt",
-  name: "Poltergeist",
-  evidence: [evidence[4], evidence[3], evidence[2]],
-    strength: "Capable of throwing multiple objects at once.",
-    weakness: "Becomes powerless with no throwables nearby.",
-  matches: 0
-}
-
-var shade = {
-  id: "#shade",
-  name: "Shade",
-  evidence: [evidence[0], evidence[2], evidence[5]],
-    strength: "Being shy makes it more difficult to locate and obtain evidence.",
-    weakness: "Less likely to hunt if multiple people are nearby.",
-  matches: 0
-}
-
-var spirit = {
-  id: "#spirit",
-  name: "Spirit",
-  evidence: [evidence[0], evidence[4], evidence[2]],
-    strength: "None.",
-    weakness: "Smudge sticks are more effective, preventing a hunt for longer.",
-  matches: 0
-}
-
-var yokai = {
-  id: "#yokai",
-  name: "Yokai",
-  evidence: [evidence[4], evidence[1], evidence[6]],
-    strength: "Talking near the Yokai will anger it, increasing the chance to attack.",
-    weakness: "Can only hear voices close to it during a hunt.",
-  matches: 0
-}
-
-var hantu = {
-  id: "#hantu",
-  name: "Hantu",
-  evidence: [evidence[3], evidence[1], evidence[5]],
-    strength: "Lower temperatures allow the Hantu to move faster.",
-    weakness: "Warmer areas slow the Hantu's movement.",
-  matches: 0
-}
-
-var goryo = {
-  id: "#goryo",
-  name: "Goryo",
-  evidence: [evidence[0], evidence[3], evidence[6]],
-    strength: "Can only be seen interacting with D.O.T.S. through a camera when nobody is nearby.",
-    weakness: "Tends to wander away less from its ghost room.",
-  matches: 0
-}
-
-var myling = {
-  id: "#myling",
-  name: "Myling",
-  evidence: [evidence[0], evidence[3], evidence[2]],
-    strength: "Has quieter footsteps during a hunt.",
-    weakness: "Produces paranormal sounds more frequently.",
-  matches: 0
-}
-
-var onryo = {
-  id: "#onryo",
-  name: "Onryo",
-  evidence: [evidence[4], evidence[1], evidence[5]],
-    strength: "A flame extinguishing can cause an Onryo to attack.",
-    weakness: "The presence of flames reduces the Onryo's ability to attack.",
-  matches: 0
-}
-
-var raiju = {
-  id: "#raiju",
-  name: "Raiju",
-  evidence: [evidence[0], evidence[1], evidence[6]],
-    strength: "Moves faster near electrical devices.",
-    weakness: "Disrupts electronic equipment from further away when it hunts.",
-  matches: 0
-}
-
-var obake = {
-  id: "#obake",
-  name: "Obake",
-  evidence: [evidence[0], evidence[3], evidence[1]],
-    strength: "May leave fingerprints that disappear quicker.",
-    weakness: "Has a small chance of leaving six-fingered handprints.",
-  matches: 0
-}
-
-var twins = {
-  id: "#twins",
-  name: "The Twins",
-  evidence: [evidence[0], evidence[4], evidence[5]],
-    strength: "Either Twin may start a hunt, though not at the same time.",
-    weakness: "Will often interact with the environment at the same time.",
-  matches: 0
-}
-
-var mimic = {
-  id: "#mimic",
-  name: "The Mimic",
-  evidence: [evidence[4], evidence[3], evidence[5]],
-    strength: "Can mimic the abilities and traits of other ghosts.",
-    weakness: "Will present Ghost Orbs as a secondary evidence.",
-  matches: 0
-}
-
-var thaye = {
-  id: "#thaye",
-  name: "Thaye",
-  evidence: [evidence[1], evidence[2], evidence[6]],
-    strength: "Entering the location makes it active, defensive and agile.",
-    weakness: "Becomes slower and less active over time.",
-  matches: 0
-}
-
-var moroi = {
-  id: "#moroi",
-  name: "Moroi",
-  evidence: [evidence[4], evidence[2], evidence[5]],
-    strength: "Moves noticeably faster at low player sanity and can make players lose sanity quicker than usual while investigating.",
-    weakness: "Smudge sticks blind the ghost for longer during hunts.",
-  matches: 0
-}
-
-var deogen = {
-  id: "#deogen",
-  name: "Deogen",
-  evidence: [evidence[4], evidence[2], evidence[6]],
-    strength: "Always knows where the player is during a hunt and moves very fast when going to their location.",
-    weakness: "Moves very slowly when it sees its victim.",
+    evidence: [evidence[1], evidence[5], evidence[6]],
+    strength: "Can quickly drain sanity from nearby players.",
+    weakness: "Smudging the Yurei will temporarily trap it and reduce how often it wanders. Using its ability causes it to slam doors.",
   matches: 0
 }
 
 // create array of ghosts!
-var ghosts = [banshee, demon, jinn, mare, oni, 
-              phantom, polt, revenant, shade, spirit, 
-              wraith, yurei, yokai, hantu, goryo, 
-              myling, onryo, raiju, obake, twins,
-              mimic, thaye, moroi, deogen];
+var ghosts = [
+                aswang,
+                banshee,
+                dayan,
+                deildegast,
+                demon,
+                deogen,
+                gallu,
+                goryo,
+                hantu,
+                jinn,
+                kormos,
+                mare,
+                moroi,
+                myling,
+                obake,
+                obambo,
+                oni,
+                onryo,
+                phantom,
+                poltergeist,
+                raiju,
+                revenant,
+                shade,
+                spirit,
+                thaye,
+                themimic,
+                thetwins,
+                wraith,
+                yokai,
+                yurei
+            ];
 
 
 // DEFINE FUNCTIONS
