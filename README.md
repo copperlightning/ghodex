@@ -2,6 +2,7 @@
 A fanmade Phasmophobia companion app.
 
 Author: copperlightning
+
 Version: 4.0.0
 
 LIVE SITE: https://studiosearose.com/ghodex/
